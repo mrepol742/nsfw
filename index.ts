@@ -26,7 +26,7 @@ function getRoutes() {
             let results = await main(url);
             res.setHeader("Content-Type", "text/json");
             res.writeHead(200);
-            res.end(results);
+            res.end(JSON.parse(results));
         } else {
             res.setHeader("Content-Type", "text/json");
             res.writeHead(200);
@@ -43,11 +43,16 @@ async function main(url) {
     const image = await tf.node.decodeImage(pic.data);
     const predictions = await model.classify(image);
     image.dispose();
-    if (Math.floor((predictions[0].probability / 1.0) * 100) > 90) {
+    return predictions;
+}
+
+
+/*
+ if (Math.floor((predictions[0].probability / 1.0) * 100) > 90) {
         return '{result: "Drawing"}';
     } else if (Math.floor((predictions[2].probability / 1.0) * 100) > 90 || Math.floor((predictions[3].probability / 1.0) * 100) > 90 || Math.floor((predictions[4].probability / 1.0) * 100) > 90) {
         return '{result: "Explicit"}';
     } else {
         return '{result: "Nothing"}';
     }
-}
+    */

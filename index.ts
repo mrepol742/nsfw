@@ -1,18 +1,46 @@
-import * as axios from 'axios'; //you can use any http client
+import * as axios from 'axios';
 import * as tf from '@tensorflow/tfjs-node';
-import * as nsfw from'nsfwjs';
+import * as nsfw from 'nsfwjs';
+import * as https from 'https';
 
-async function fn() {
-  const pic = await axios.get("https://mrepol742.github.io/images/webvium22.png", {
+let model;
+
+const loadModel = async () => {
+  model = await nsfw.load()
+}
+
+const server = http.createServer(getRoutes());
+
+model().then(() => server.listen(7421, function () {
+  console.log("server_status", "7421")
+}))
+
+function getRoutes() {
+  return async function (req, res) {
+      let ress = req.url;
+      let url = ress.split("?")[0].replace("url=", "");
+      console.log(req.method, req.headers.origin, url);
+      let results = await main(url);
+      res.setHeader("Content-Type", "text/json");
+      res.writeHead(200);
+      res.end(errorpage);
+  }
+}
+
+async function main(url) {
+  const pic = await axios.get(url, {
     responseType: 'arraybuffer',
   })
 
-  const model = await nsfw.load() // To load a local model, nsfw.load('file://./path/to/model/')
-  // Image must be in tf.tensor3d format
-  // you can convert image to tf.tensor3d with tf.node.decodeImage(Uint8Array,channels)
   const image = await tf.node.decodeImage(pic.data)
   const predictions = await model.classify(image)
-  image.dispose() // Tensor memory must be managed explicitly (it is not sufficient to let a tf.Tensor go out of scope for its memory to be released).
-  console.log(predictions)
+  image.dispose()
+  if (Math.floor((predictions[0].probability / 1.0) * 100) > 90) {
+    return '{result: "Drawing"}';
+  } else if (Math.floor((predictions[2].probability / 1.0) * 100) > 90 || Math.floor((predictions[3].probability / 1.0) * 100) > 90
+     || Math.floor((predictions[4].probability / 1.0) * 100) > 90) {
+    return '{result: "Explicit"}';
+  } else {
+    return '{result: "Nothing"}';
+  }
 }
-fn()

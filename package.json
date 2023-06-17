@@ -1,0 +1,25 @@
+{
+  "name": "nsfw",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "clear && node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrepol742/nsfw.git"
+  },
+  "author": "Melvin Jones Repol",
+  "license": "SEE LICENSE IN https://github.com/mrepol742/Mrepol742-the-License",
+  "bugs": {
+    "url": "https://github.com/mrepol742/nsfw/issues"
+  },
+  "homepage": "https://github.com/mrepol742/nsfw#readme",
+  "dependencies": {
+    "@tensorflow/tfjs-node": "^4.7.0",
+    "axios": "^1.4.0",
+    "nsfwjs": "^2.4.2"
+  }
+}

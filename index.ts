@@ -17,10 +17,6 @@ loadModel().then(() =>
     })
 );
 
-server.listen(7421, function () {
-    console.log("server_status", "7421");
-});
-
 function getRoutes() {
     return async function (req, res) {
         let ress = req.url;
@@ -30,7 +26,7 @@ function getRoutes() {
             let results = await main(url);
             res.setHeader("Content-Type", "text/json");
             res.writeHead(200);
-            res.end(url);
+            res.end(results);
         } else {
             res.setHeader("Content-Type", "text/json");
             res.writeHead(200);

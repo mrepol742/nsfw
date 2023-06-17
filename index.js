@@ -57,9 +57,6 @@ loadModel().then(function () {
         console.log("server_status", "7421");
     });
 });
-server.listen(7421, function () {
-    console.log("server_status", "7421");
-});
 function getRoutes() {
     return function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
@@ -76,7 +73,7 @@ function getRoutes() {
                         results = _a.sent();
                         res.setHeader("Content-Type", "text/json");
                         res.writeHead(200);
-                        res.end(url);
+                        res.end(results);
                         return [3 /*break*/, 3];
                     case 2:
                         res.setHeader("Content-Type", "text/json");

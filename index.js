@@ -36,37 +36,76 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var axios = require("axios"); //you can use any http client
+var axios = require("axios");
 var tf = require("@tensorflow/tfjs-node");
 var nsfw = require("nsfwjs");
-function fn() {
+var http = require("http");
+var model;
+var loadModel = function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, nsfw.load()];
+            case 1:
+                model = _a.sent();
+                return [2 /*return*/];
+        }
+    });
+}); };
+var server = http.createServer(getRoutes());
+model().then(function () { return server.listen(7421, function () {
+    console.log("server_status", "7421");
+}); });
+function getRoutes() {
+    return function (req, res) {
+        return __awaiter(this, void 0, void 0, function () {
+            var ress, url, results;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        ress = req.url;
+                        url = ress.split("?")[0].replace("url=", "");
+                        console.log(req.method, req.headers.origin, url);
+                        return [4 /*yield*/, main(url)];
+                    case 1:
+                        results = _a.sent();
+                        res.setHeader("Content-Type", "text/json");
+                        res.writeHead(200);
+                        res.end(results);
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+}
+function main(url) {
     return __awaiter(this, void 0, void 0, function () {
-        var pic, model, image, predictions;
+        var pic, image, predictions;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, axios.get("https://mrepol742.github.io/images/webvium22.png", {
+                case 0: return [4 /*yield*/, axios.get(url, {
                         responseType: 'arraybuffer',
                     })];
                 case 1:
                     pic = _a.sent();
-                    return [4 /*yield*/, nsfw.load()
-                        // Image must be in tf.tensor3d format
-                        // you can convert image to tf.tensor3d with tf.node.decodeImage(Uint8Array,channels)
-                    ]; // To load a local model, nsfw.load('file://./path/to/model/')
-                case 2:
-                    model = _a.sent() // To load a local model, nsfw.load('file://./path/to/model/')
-                    ;
                     return [4 /*yield*/, tf.node.decodeImage(pic.data)];
-                case 3:
+                case 2:
                     image = _a.sent();
                     return [4 /*yield*/, model.classify(image)];
-                case 4:
+                case 3:
                     predictions = _a.sent();
-                    image.dispose(); // Tensor memory must be managed explicitly (it is not sufficient to let a tf.Tensor go out of scope for its memory to be released).
-                    console.log(predictions);
+                    image.dispose();
+                    if (Math.floor((predictions[0].probability / 1.0) * 100) > 90) {
+                        return [2 /*return*/, '{result: "Drawing"}'];
+                    }
+                    else if (Math.floor((predictions[2].probability / 1.0) * 100) > 90 || Math.floor((predictions[3].probability / 1.0) * 100) > 90
+                        || Math.floor((predictions[4].probability / 1.0) * 100) > 90) {
+                        return [2 /*return*/, '{result: "Explicit"}'];
+                    }
+                    else {
+                        return [2 /*return*/, '{result: "Nothing"}'];
+                    }
                     return [2 /*return*/];
             }
         });
     });
 }
-fn();

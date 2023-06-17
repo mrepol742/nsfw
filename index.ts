@@ -1,7 +1,7 @@
 import * as axios from 'axios';
 import * as tf from '@tensorflow/tfjs-node';
 import * as nsfw from 'nsfwjs';
-import * as https from 'https';
+import * as http from 'http';
 
 let model;
 
@@ -23,7 +23,7 @@ function getRoutes() {
       let results = await main(url);
       res.setHeader("Content-Type", "text/json");
       res.writeHead(200);
-      res.end(errorpage);
+      res.end(results);
   }
 }
 

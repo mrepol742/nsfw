@@ -103,16 +103,7 @@ function main(url) {
                 case 3:
                     predictions = _a.sent();
                     image.dispose();
-                    if (Math.floor((predictions[0].probability / 1.0) * 100) > 90) {
-                        return [2 /*return*/, '{result: "Drawing"}'];
-                    }
-                    else if (Math.floor((predictions[2].probability / 1.0) * 100) > 90 || Math.floor((predictions[3].probability / 1.0) * 100) > 90 || Math.floor((predictions[4].probability / 1.0) * 100) > 90) {
-                        return [2 /*return*/, '{result: "Explicit"}'];
-                    }
-                    else {
-                        return [2 /*return*/, '{result: "Nothing"}'];
-                    }
-                    return [2 /*return*/];
+                    return [2 /*return*/, JSON.stringify(predictions)];
             }
         });
     });

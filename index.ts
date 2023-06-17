@@ -11,7 +11,7 @@ const loadModel = async () => {
 
 const server = http.createServer(getRoutes());
 
-model().then(() => server.listen(7421, function () {
+loadModel().then(() => server.listen(7421, function () {
   console.log("server_status", "7421")
 }))
 

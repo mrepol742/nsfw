@@ -52,7 +52,7 @@ var loadModel = function () { return __awaiter(void 0, void 0, void 0, function 
     });
 }); };
 var server = http.createServer(getRoutes());
-model().then(function () { return server.listen(7421, function () {
+loadModel().then(function () { return server.listen(7421, function () {
     console.log("server_status", "7421");
 }); });
 function getRoutes() {

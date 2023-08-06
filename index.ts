@@ -4,6 +4,7 @@ import * as nsfw from "nsfwjs";
 import * as http from "http";
 
 let model;
+const corsWhitelist = ["https://mrepol742.github.io"];
 
 const loadModel = async () => {
     model = await nsfw.load();
@@ -20,6 +21,12 @@ loadModel().then(() =>
 function getRoutes() {
     return async function (req, res) {
         let ress = req.url;
+        console.log(req.method + " " + req.headers.origin + " " + ress);
+        if (req.method != "GET" && !(corsWhitelist.indexOf(req.headers.origin) !== -1)) {
+            res.writeHead(301, { Location: "https://mrepol742.github.io/unauthorized" });
+            res.end();
+            return;
+        }
         if (ress.includes("?url=")) {
             let url = ress.split("?url=")[1];
             console.log(req.method, req.headers.origin, ress);
@@ -28,9 +35,8 @@ function getRoutes() {
             res.writeHead(200);
             res.end(results);
         } else {
-            res.setHeader("Content-Type", "text/json");
-            res.writeHead(200);
-            res.end('{result: "error invalid parameter"}');
+            res.writeHead(301, { Location: "https://mrepol742.github.io/404.html" });
+            res.end();
         }
     };
 }

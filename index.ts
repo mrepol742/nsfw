@@ -22,21 +22,21 @@ function getRoutes() {
     return async function (req, res) {
         let ress = req.url;
         console.log(req.method + " " + req.headers.origin + " " + ress);
-        if (req.method != "GET" && !(corsWhitelist.indexOf(req.headers.origin) !== -1)) {
+        if (req.method != "GET" || !(corsWhitelist.indexOf(req.headers.origin) !== -1)) {
             res.writeHead(301, { Location: "https://mrepol742.github.io/unauthorized" });
             res.end();
-            return;
-        }
-        if (ress.includes("?url=")) {
-            let url = ress.split("?url=")[1];
-            console.log(req.method, req.headers.origin, ress);
-            let results = await main(url);
-            res.setHeader("Content-Type", "text/json");
-            res.writeHead(200);
-            res.end(results);
         } else {
-            res.writeHead(301, { Location: "https://mrepol742.github.io/404.html" });
-            res.end();
+            if (ress.includes("?url=")) {
+                let url = ress.split("?url=")[1];
+                console.log(req.method, req.headers.origin, ress);
+                let results = await main(url);
+                res.setHeader("Content-Type", "text/json");
+                res.writeHead(200);
+                res.end(results);
+            } else {
+                res.writeHead(301, { Location: "https://mrepol742.github.io/404.html" });
+                res.end();
+            }
         }
     };
 }

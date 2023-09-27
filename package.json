@@ -4,8 +4,8 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "start": "clear && node index.js",
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "clear && while [ true ]; do node index.js ; done",
+        "test": "clear && node --inspect index.js",
         "prettier": "prettier ./ --write"
     },
     "repository": {
@@ -13,7 +13,7 @@
         "url": "git+https://github.com/mrepol742/nsfw.git"
     },
     "author": "Melvin Jones Repol",
-    "license": "SEE LICENSE IN https://github.com/mrepol742/Mrepol742-the-License",
+    "license": "SEE LICENSE IN https://github.com/mrepol742/search/blob/master/LICENSE",
     "bugs": {
         "url": "https://github.com/mrepol742/nsfw/issues"
     },
